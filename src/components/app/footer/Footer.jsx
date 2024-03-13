@@ -1,7 +1,11 @@
 import React from 'react';
+import { Pagination } from 'antd';
+import styles from './footer.module.scss';
 
 export default function Footer() {
   return (
-    <section>Footer</section>
+    <div className={styles.container}>
+      <Pagination defaultCurrent={1} total={50} />
+    </div>
   );
 }

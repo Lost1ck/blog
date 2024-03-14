@@ -1,6 +1,129 @@
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 100px;
+.articleForm {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  max-width: 800px;
+  margin: 40px auto;
+
+  h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 16px;
+
+    &:last-of-type {
+      margin-bottom: 32px;
+    }
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+
+    &:focus {
+      outline: none;
+      border-color: #7da2a9;
+    }
+  }
+
+  textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  .tag {
+    display: inline-block;
+    background: #eef;
+    padding: 5px 10px;
+    margin: 4px;
+    border-radius: 4px;
+    font-size: 14px;
+
+    button {
+      margin-left: 8px;
+      background: none;
+      border: none;
+      color: #f00;
+      cursor: pointer;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .preview {
+    margin-top: 24px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fafafa;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+
+      &.addTag {
+        background-color: #5cb85c;
+        color: #fff;
+
+        &:hover {
+          background-color: darken(#5cb85c, 10%);
+        }
+      }
+
+      &.deleteTag {
+        background-color: #d9534f;
+        color: #fff;
+
+        &:hover {
+          background-color: darken(#d9534f, 10%);
+        }
+      }
+
+      &.send {
+        background-color: #0275d8;
+        color: #fff;
+        margin-top: 20px;
+
+        &:hover {
+          background-color: darken(#0275d8, 10%);
+        }
+      }
+    }
+
+    input[type="text"] {
+      flex: 1;
+    }
+  }
 }

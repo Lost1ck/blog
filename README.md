@@ -1,1 +1,1 @@
-# Это стандартная сборка Webpack - React - npm 
+# https://blog-nine-alpha-87.vercel.app/post

@@ -40,7 +40,7 @@ export default function Header() {
               <img src="path_to_image.jpg" alt="John Doe" className={styles.picture} />
             </div>
             <Link
-              to="account/posts"
+              to="account/articles"
               className={styles['log-out']}
               onClick={logining}
             >

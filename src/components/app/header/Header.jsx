@@ -5,19 +5,19 @@ import { Link } from 'react-router-dom';
 import styles from './header.module.scss';
 
 export default function Header() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(true);
 
   const logining = () => {
-    setLoggedIn(true);
+    setLoggedIn(false);
   };
 
   const loginout = () => {
-    setLoggedIn(false);
+    setLoggedIn(true);
   };
 
   return (
     <header className={styles.container}>
-      <Link to="account/" onClick={loginout}>
+      <Link to="/" onClick={loginout}>
         <div className={styles.title}>
           <h2>Realworld Blog</h2>
         </div>
@@ -40,7 +40,7 @@ export default function Header() {
               <img src="path_to_image.jpg" alt="John Doe" className={styles.picture} />
             </div>
             <Link
-              to="/"
+              to="account/posts"
               className={styles['log-out']}
               onClick={logining}
             >

@@ -1,0 +1,133 @@
+$font-color: #333;
+$border-color: #ddd;
+$focus-border-color: #7da2a9;
+$delete-color: #f00;
+$tag-background: #1890ff;
+$send-background: #0275d8;
+$font-size: 14px;
+$border-radius: 4px;
+
+@mixin button-style {
+  padding: 10px 35px;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-size: $font-size;
+  outline: none;
+
+  // &:hover {
+  // background-color: darken($tag-background, 10%);
+  // }
+}
+
+.articleForm {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  max-width: 800px;
+  margin: 40px auto;
+
+  h2 {
+    color: $font-color;
+    font-size: 24px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 20px;
+    color: $font-color;
+    font-size: 16px;
+
+    &:last-of-type {
+      margin-bottom: 32px;
+    }
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    box-sizing: border-box;
+    font-size: $font-size;
+
+    &:focus {
+      outline: none;
+      border-color: $focus-border-color;
+    }
+  }
+
+  textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  .tag {
+    margin-top: 10px;
+    display: flex;
+
+    button {
+      @include button-style;
+
+      &.add-tag {
+        background-color: #fff;
+        color: #fff;
+        padding: 10px 30px;
+        white-space: nowrap;
+        border: 1px solid $tag-background;
+        color: $tag-background;
+      }
+
+      &.send {
+        background-color: $send-background;
+        color: #fff;
+        margin-top: 20px;
+      }
+    }
+  }
+}
+
+.delete-tag {
+  border-radius: 5px;
+  border: 1px solid $delete-color !important;
+  outline: none;
+  background-color: #fff;
+  color: $delete-color;
+  font-size: 16px;
+  margin-right: 10px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.tag-input {
+  height: 100%;
+  margin-right: 20px;
+  width: 300px;
+}
+
+.tag-input-show {
+  height: 100%;
+  margin-right: 20px;
+  width: 300px;
+}
+
+.send {
+  height: 40px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #fff;
+  width: 319px;
+  background-color: $tag-background;
+  cursor: pointer;
+}

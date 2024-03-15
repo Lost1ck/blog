@@ -2,7 +2,6 @@
 /* eslint-disable arrow-body-style */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Title from './title/Title';
 import styles from './header.module.scss';
 
 export default function Header() {
@@ -12,35 +11,41 @@ export default function Header() {
     setLoggedIn(true);
   };
 
+  const loginout = () => {
+    setLoggedIn(false);
+  };
+
   return (
     <header className={styles.container}>
-      <Link to="/">
-        <Title />
+      <Link to="account/" onClick={loginout}>
+        <div className={styles.title}>
+          <h2>Realworld Blog</h2>
+        </div>
       </Link>
       <div className={styles['container-flex']}>
         {loggedIn ? (
           <>
-            <Link to="/signup">
-              <p className={styles.signup}>Sign Up</p>
-            </Link>
-            <Link to="/signin">
+            <Link to="signin">
               <p className={styles.signin}>Sign In</p>
+            </Link>
+            <Link to="signup">
+              <p className={styles.signup}>Sign Up</p>
             </Link>
           </>
         ) : (
           <>
-            <Link to="/post" className={styles.signup}>Create article</Link>
+            <Link to="account/createpost" className={styles.signup}>Create article</Link>
             <div className={styles.profileContainer}>
-              <Link to="/profileedit" className={styles.username}>John Doe</Link>
+              <Link to="account/profileedit" className={styles.username}>John Doe</Link>
               <img src="path_to_image.jpg" alt="John Doe" className={styles.picture} />
             </div>
-            <button
-              type="submit"
+            <Link
+              to="/"
               className={styles['log-out']}
-              onSubmit={logining}
+              onClick={logining}
             >
               Log Out
-            </button>
+            </Link>
           </>
         )}
       </div>

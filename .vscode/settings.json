@@ -3,6 +3,7 @@
     "antd",
     "createarticle",
     "logining",
+    "loginout",
     "profileedit",
     "signin",
     "signup"

@@ -11,18 +11,20 @@ import SignUp from './header/signup/SignUp';
 import SignIn from './header/signin/SignIn';
 import Content from './content/Content';
 import ProfileEdit from './header/profileedit/ProfileEdit';
-import Post from './posts/Post';
+import Post from './createpost/CreatePost';
 
 const App = () => (
   <Router>
     <UserProvider>
       <Header />
       <Routes>
-        <Route path="/" element={<Content />} />
+        <Route path="/" />
+        <Route path="/post" element={<Content />} />
+        <Route path="account/" element={<Content />} />
+        <Route path="account/createpost" element={<Post />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/profileedit" element={<ProfileEdit />} />
-        <Route path="/Post" element={<Post />} />
+        <Route path="account/profileedit" element={<ProfileEdit />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </UserProvider>

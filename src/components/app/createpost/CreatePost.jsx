@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import Markdown from 'markdown-to-jsx';
-import styles from './post.module.scss';
+import styles from './createpost.module.scss';
 
 export default function Post() {
   const [title, setTitle] = useState('');
@@ -17,13 +16,17 @@ export default function Post() {
   const handleTagAdd = () => {
     if (newTag && !tags.includes(newTag)) {
       setTags([...tags, newTag]);
-      setNewTag(''); // Reset the input after adding a tag
+      setNewTag('');
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // handle form submission, possibly sending data to an API or elsewhere
+    // server
+  };
+
+  const handleDelete = () => {
+    setNewTag('');
   };
 
   return (
@@ -33,6 +36,7 @@ export default function Post() {
         <label>
           Title
           <input
+            placeholder="Title"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -42,6 +46,7 @@ export default function Post() {
         <label>
           Short description
           <input
+            placeholder="Short description"
             type="text"
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
@@ -49,43 +54,63 @@ export default function Post() {
           />
         </label>
         <label>
-          Text (Markdown supported)
+          Text
           <textarea
+            placeholder="Text"
             value={text}
             onChange={(e) => setText(e.target.value)}
             className={styles.textarea}
           />
         </label>
-        <div className={styles.preview}>
-          <h3>Preview</h3>
-          <Markdown>{text}</Markdown>
-        </div>
         <label>
           Tags
-          <div className={styles.tags}>
-            {tags.map((tag, index) => (
-              <div key={tag.index} className={styles.tag}>
-                {tag}
-                <button type="button" onClick={() => handleTagDelete(index)} className={styles.deleteTag}>
-                  Delete
-                </button>
+          {tags.map((tag, index) => (
+            <div key={tag.index} className={styles.tag}>
+              <div className={styles['tag-input-show']}>
+                <input
+                  type="text"
+                  value={tag}
+                  readOnly
+                />
               </div>
-            ))}
-            <div className={styles.tagInput}>
+              <button
+                type="button"
+                onClick={() => handleTagDelete(index)}
+                className={styles['delete-tag']}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+          <div className={styles.tag}>
+            <div className={styles['tag-input']}>
               <input
+                placeholder="Tag"
                 type="text"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleTagAdd()}
-                className={styles.input} // Apply input styles
               />
-              <button type="button" onClick={handleTagAdd} className={styles.addTag}>
-                Add tag
-              </button>
             </div>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className={styles['delete-tag']}
+            >
+              Delete
+            </button>
+            <button
+              type="button"
+              onClick={handleTagAdd}
+              className={styles['add-tag']}
+            >
+              Add tag
+            </button>
           </div>
         </label>
-        <button type="submit" className={styles.send}>Send</button>
+        <button type="submit" className={styles.send}>
+          Send
+        </button>
       </form>
     </div>
   );

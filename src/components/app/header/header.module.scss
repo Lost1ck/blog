@@ -6,31 +6,26 @@
   align-items: center;
   padding: 0 20px;
   background-color: #fff;
+  font-size: 18px;
 }
 .container-flex {
   display: flex;
   align-items: center;
 }
 .signin {
-  margin-left: 50px;
-  border: 1px solid #52C41A;
   padding: 10px 20px;
-  border-radius: 5px;
-  color: #52C41A;
   font-weight: 400;
-  font-size: 18px;
   line-height: 28px;
 }
 .signup {
   font-weight: 400;
-  font-size: 18px;
   line-height: 28px;
   border-radius: 5px;
   color: #52C41A;
   border: 1.5px solid #52C41A;
-  padding: 5px 15px;
-  line-height: 22px;
-  font-size: 14px;
+  line-height: 28px;
+  padding: 10px 30px;
+  margin-left: 20px;
 }
 
 .log-out {
@@ -43,6 +38,7 @@
   border: 1.5px solid #000000BF;
   background-color: transparent;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .picture {
@@ -59,4 +55,11 @@
   line-height: 28px;
   color: rgba(0, 0, 0, .8);
   margin-left: 40px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+  color: #000;
 }

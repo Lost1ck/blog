@@ -4,6 +4,7 @@ import { Pagination } from 'antd';
 import styles from './style.module.scss';
 import fetchArticles from '../../store/actions/articlesActions';
 import Spinner from '../spin/Spin';
+import Noarticles from '../noarticles/Noarticles';
 
 const ArticlesComponent = () => {
   const [currentPage, setCurrentPage] = React.useState(0);
@@ -20,8 +21,7 @@ const ArticlesComponent = () => {
   };
 
   if (loading) return <Spinner className={styles.spin} />;
-  if (error) return <p>Error loading articles!</p>;
-
+  if (error) return <Noarticles />;
   const convertDate = (dateStr) => {
     const dateObj = new Date(dateStr);
 
@@ -38,7 +38,7 @@ const ArticlesComponent = () => {
 
   return (
     <div>
-      {console.log(articles)}
+      {/* {console.log(articles)} */}
       <div className={styles.container}>
         {articles.map((article) => (
           <article key={article.slug} className={styles.article}>
@@ -59,9 +59,9 @@ const ArticlesComponent = () => {
       </div>
       <Pagination
         className={styles.pagination}
-        current={currentPage + 1}
+        defaultCurrent={currentPage + 1}
         onChange={handlePageChange}
-        total={50}
+        total={500}
       />
     </div>
   );

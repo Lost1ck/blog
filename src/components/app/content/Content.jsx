@@ -1,12 +1,8 @@
 import React from 'react';
-import Posts from '../posts/CreatePosts';
-import Footer from '../footer/Footer';
+import ArticlesComponent from '../posts/ArticlesComponent';
 
 export default function Content() {
   return (
-    <>
-      <Posts />
-      <Footer />
-    </>
+    <ArticlesComponent />
   );
 }

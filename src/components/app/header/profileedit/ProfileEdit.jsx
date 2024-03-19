@@ -16,6 +16,7 @@ const ProfileEdit = () => {
     <div className={styles.editProfileForm}>
       <h2>Edit Profile</h2>
       <label>
+        Username
         <input
           type="text"
           name="username"
@@ -25,6 +26,7 @@ const ProfileEdit = () => {
         />
       </label>
       <label>
+        Email
         <input
           type="email"
           name="email"
@@ -34,6 +36,7 @@ const ProfileEdit = () => {
         />
       </label>
       <label>
+        Password
         <input
           type="password"
           name="password"

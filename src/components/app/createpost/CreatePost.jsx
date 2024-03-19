@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import styles from './createpost.module.scss';
 
-export default function Post() {
+export default function CreatePost() {
   const [title, setTitle] = useState('');
   const [shortDescription, setShortDescription] = useState('');
   const [text, setText] = useState('');

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import styles from './header.module.scss';
 
 export default function Header() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(true);
 
   const logining = () => {
     setLoggedIn(true);
@@ -17,7 +17,7 @@ export default function Header() {
 
   return (
     <header className={styles.container}>
-      <Link to="account/articles" onClick={loginout}>
+      <Link to="articles/" onClick={loginout}>
         <div className={styles.title}>
           <h2>Realworld Blog</h2>
         </div>

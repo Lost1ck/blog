@@ -3,11 +3,16 @@
     "antd",
     "createarticle",
     "createpost",
+    "Loggining",
     "logining",
+    "Loginning",
     "loginout",
     "Noarticles",
+    "Nointernet",
     "profileedit",
     "signin",
-    "signup"
+    "signup",
+    "singlepage",
+    "uuidv"
   ]
 }

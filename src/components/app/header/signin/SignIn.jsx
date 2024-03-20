@@ -1,72 +1,91 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable arrow-body-style */
-import React from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import styles from './signin.module.scss';
+import { userLogin } from '../../../context/LoginContext';
 
 const SignIn = () => {
-  const [formData, setFormData] = React.useState({
+  const [userLog, setUserLog] = useState({
     email: '',
     password: '',
   });
 
-  const [errors, setErrors] = React.useState({});
+  const { fetchLoggining } = userLogin();
 
-  const handleChange = (e) => {
-    const {
-      name, value, checked, type,
-    } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
+  console.log(userLog);
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Try again';
-    }
-    if (!formData.password || formData.password.length < 6 || formData.password.length > 40) {
-      newErrors.password = 'Wrong password';
-    }
-    return newErrors;
-  };
+  const {
+    register, handleSubmit, formState: { errors }, reset,
+  } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formErrors = validateForm();
-    if (Object.keys(formErrors).length === 0) {
-      console.log('Данные формы:', formData); // server
-      setFormData({
-        email: '',
-        password: '',
-      });
-      setErrors({});
-    } else {
-      setErrors(formErrors);
-    }
+  const onSubmit = async (data) => {
+    const { password, email } = data;
+
+    const userData = {
+      email, password,
+    };
+
+    setUserLog(userData);
+    console.log(userData);
+    await fetchLoggining(userData);
+    reset();
   };
 
   return (
     <div className={styles['login-form-container']}>
-      <form className={styles['login-form']} onSubmit={handleSubmit}>
+      <form className={styles['login-form']} onSubmit={handleSubmit(onSubmit)}>
         <h2>Sign In</h2>
         <div className={styles['form-group']}>
           <label htmlFor="email">Email address</label>
-          <input type="email" name="email" id="email" placeholder="Email" onChange={handleChange} />
-          {errors.email && <p className={styles.error}>{errors.email}</p>}
+          <input
+            {...register('email', {
+              required: 'Required',
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: 'Try again',
+              },
+            })}
+            type="email"
+            id="email"
+            placeholder="Email"
+          />
+          {errors.email && (
+            <p className={styles.error}>{errors.email.message}</p>
+          )}
         </div>
         <div className={styles['form-group']}>
           <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" placeholder="Password" onChange={handleChange} />
-          {errors.password && <p className={styles.error}>{errors.password}</p>}
+          <input
+            id="password"
+            {...register('password', {
+              required: 'Required',
+              minLength: {
+                value: 6,
+                message: 'Wrong password',
+              },
+              maxLength: {
+                value: 40,
+                message: 'Wrong password',
+              },
+            })}
+            type="password"
+            placeholder="Password"
+          />
+          {errors.password && (
+            <p className={styles.error}>{errors.password.message}</p>
+          )}
         </div>
-        <button type="submit" className={styles['login-button']}>Login</button>
+        <button type="submit" className={styles['login-button']}>
+          Login
+        </button>
         <p className={styles['signup-text']}>
           Dont have an account?
           {' '}
-          <Link to="/signup" className={styles.text}>Sign Up.</Link>
+          <Link to="/signup" className={styles.text}>
+            Sign Up.
+          </Link>
         </p>
       </form>
     </div>

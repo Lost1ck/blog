@@ -1,67 +1,62 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Pagination } from 'antd';
+import { Link } from 'react-router-dom';
 import styles from './style.module.scss';
-import fetchArticles from '../../store/actions/articlesActions';
 import Spinner from '../spin/Spin';
 import Noarticles from '../noarticles/Noarticles';
+import { useGlobal } from '../../context/GlobalContext';
 
 const ArticlesComponent = () => {
-  const [currentPage, setCurrentPage] = React.useState(0);
+  const [currentPage, setCurrentPage] = React.useState(1);
 
-  const dispatch = useDispatch();
-  const { loading, articles, error } = useSelector((state) => state.articles);
+  const {
+    fetchArticles, loading, articles, error, totalPages,
+  } = useGlobal();
 
   useEffect(() => {
-    dispatch(fetchArticles(currentPage));
-  }, [currentPage, dispatch]);
+    fetchArticles(currentPage);
+  }, [currentPage]);
 
   const handlePageChange = (page) => {
-    setCurrentPage(page - 1);
+    setCurrentPage(page);
   };
 
   if (loading) return <Spinner className={styles.spin} />;
   if (error) return <Noarticles />;
+
   const convertDate = (dateStr) => {
     const dateObj = new Date(dateStr);
-
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December',
-    ];
-    const month = months[dateObj.getMonth()];
-
-    const formattedDate = `${month} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
-
-    return formattedDate;
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return `${months[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       {/* {console.log(articles)} */}
-      <div className={styles.container}>
-        {articles.map((article) => (
-          <article key={article.slug} className={styles.article}>
+      {articles.map((article) => (
+        <Link
+          key={article.slug}
+          to={`/articles/${article.slug}`}
+          style={{ color: 'black' }}
+          className={styles.article}
+        >
+          <div>
             <div>
-              <div>
-                <div>
-                  <div>{article.author.username}</div>
-                  <div>{convertDate(article.updatedAt)}</div>
-                </div>
-                <div><img src={article.img} alt="Logo_picture" /></div>
-              </div>
+              <div>{article.author.username}</div>
+              <div>{convertDate(article.updatedAt)}</div>
+              <div>{article.favoritesCount}</div>
+              <img src={article.img} alt={article.title || 'Article image'} />
               <div>{article.title}</div>
+              <div>{article.description}</div>
             </div>
-            <div>{article.description}</div>
-            {/* <p>{article.description}</p> */}
-          </article>
-        ))}
-      </div>
+          </div>
+        </Link>
+      ))}
       <Pagination
         className={styles.pagination}
-        defaultCurrent={currentPage + 1}
+        defaultCurrent={currentPage}
         onChange={handlePageChange}
-        total={500}
+        total={totalPages * 10}
       />
     </div>
   );

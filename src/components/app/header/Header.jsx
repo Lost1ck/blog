@@ -5,34 +5,27 @@ import { Link } from 'react-router-dom';
 import styles from './header.module.scss';
 
 export default function Header() {
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   const logining = () => {
-    setLoggedIn(true);
+    setLoggedIn('');
   };
 
-  const loginout = () => {
-    setLoggedIn(false);
-  };
+  console.log(logining);
+
+  // const loginout = () => {
+  //   setLoggedIn('');
+  // };
 
   return (
     <header className={styles.container}>
-      <Link to="articles/" onClick={loginout}>
+      <Link to="/">
         <div className={styles.title}>
           <h2>Realworld Blog</h2>
         </div>
       </Link>
       <div className={styles['container-flex']}>
         {loggedIn ? (
-          <>
-            <Link to="signin">
-              <p className={styles.signin}>Sign In</p>
-            </Link>
-            <Link to="signup">
-              <p className={styles.signup}>Sign Up</p>
-            </Link>
-          </>
-        ) : (
           <>
             <Link to="account/createpost" className={styles.signup}>Create article</Link>
             <div className={styles.profileContainer}>
@@ -42,9 +35,17 @@ export default function Header() {
             <Link
               to="/"
               className={styles['log-out']}
-              onClick={logining}
             >
               Log Out
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link to="signin">
+              <p className={styles.signin}>Sign In</p>
+            </Link>
+            <Link to="signup">
+              <p className={styles.signup}>Sign Up</p>
             </Link>
           </>
         )}

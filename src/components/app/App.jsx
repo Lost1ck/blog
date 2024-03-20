@@ -1,12 +1,10 @@
-/* eslint-disable react/jsx-no-useless-fragment */
 import React from 'react';
 import 'normalize.css';
 import {
   BrowserRouter as Router,
   Routes, Route,
 } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { UserProvider } from '../context/Context';
+import { GlobalProvider, useGlobal } from '../context/GlobalContext';
 import NotFound from '../notFound/NotFound';
 import Header from './header/Header';
 import SignUp from './header/signup/SignUp';
@@ -15,32 +13,41 @@ import Content from './content/Content';
 import ProfileEdit from './header/profileedit/ProfileEdit';
 import CreatePost from './createpost/CreatePost';
 import Nointernet from './nointernet/Nointernet';
+import SinglePage from './singlepage/SinglePage';
+import { RegistrationProvider } from '../context/RegistrationContext';
+import { LoginProvider } from '../context/LoginContext';
 
-const App = () => {
-  const isConnected = useSelector((state) => state.network.isOnline);
+const AppContent = () => {
+  const { isOnline } = useGlobal();
 
-  return (
+  return isOnline ? (
     <>
-      {isConnected ? (
-        <Router>
-          <UserProvider>
-            <Header />
-            <Routes>
-              <Route path="/" element={<Content />} />
-              <Route path="articles/" element={<Content />} />
-              <Route path="account/createpost" element={<CreatePost />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="account/profileedit" element={<ProfileEdit />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </UserProvider>
-        </Router>
-      ) : (
-        <Nointernet />
-      )}
+      <Header />
+      <Routes>
+        <Route path="/" element={<Content />} />
+        <Route path="articles/:slug" element={<SinglePage />} />
+        <Route path="account/createpost" element={<CreatePost />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="account/profileedit" element={<ProfileEdit />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
+  ) : (
+    <Nointernet />
   );
 };
+
+const App = () => (
+  <Router>
+    <GlobalProvider>
+      <RegistrationProvider>
+        <LoginProvider>
+          <AppContent />
+        </LoginProvider>
+      </RegistrationProvider>
+    </GlobalProvider>
+  </Router>
+);
 
 export default App;

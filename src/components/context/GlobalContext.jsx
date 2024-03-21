@@ -5,7 +5,7 @@ import React, { createContext, useState, useEffect } from 'react';
 const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);

@@ -5,10 +5,12 @@ import React, { createContext, useState } from 'react';
 import { message } from 'antd';
 import Spin from '../app/spin/Spin';
 import { LoginProvider } from './LoginContext';
+import { useGlobal } from './GlobalContext';
 
 const RegistrationContext = createContext();
 
 export function RegistrationProvider({ children }) {
+  const { setLoggedIn } = useGlobal();
   const { setStoredData } = LoginProvider;
   const [isLoging, setLoging] = useState(false);
   const [userReg, setUserReg] = useState({
@@ -35,7 +37,8 @@ export function RegistrationProvider({ children }) {
       if (data && Object.prototype.hasOwnProperty.call(data, 'user')) {
         localStorage.setItem('accessToken', JSON.stringify(data));
         setStoredData(data);
-        window.location.href = '/';
+        setLoggedIn(true);
+        // window.location.href = '/';
       } else {
         message.error('Invalid data received');
       }

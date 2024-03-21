@@ -2,37 +2,36 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './profileedit.module.scss';
+import { useUpdateUserData } from '../../../context/UserUpdate';
 
 const ProfileEdit = () => {
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
+    register, handleSubmit, formState: { errors }, reset,
   } = useForm();
+  const { fetchNewUserInfo } = useUpdateUserData();
 
   const local = JSON.parse(localStorage.getItem('accessToken'));
+
   const onSubmit = async (data) => {
     const {
-      username, newPassword, email, avatar,
+      username, newPassword, email, image,
     } = data;
-    let newData = {};
-    if (username !== local.user.username) {
-      newData = { ...newData, username };
+    const newData = {};
+
+    if (username !== local.user.username) newData.username = username;
+    if (newPassword !== local.user.password) newData.password = newPassword;
+    if (email !== local.user.email) newData.email = email;
+    if (image !== local.user.image) newData.image = image;
+
+    // if (Object.keys(newData).length > 0) {
+    const updateResult = await fetchNewUserInfo(newData);
+    if (updateResult && !updateResult.errors) {
+      const updatedData = { ...local.user, ...newData };
+      localStorage.setItem('accessToken', JSON.stringify({ user: updatedData }));
+      reset();
     }
-    if (newPassword !== local.user.password) {
-      newData = { ...newData, password: newPassword };
-    }
-    if (email !== local.user.email) {
-      newData = { ...newData, email };
-    }
-    if (avatar !== local.user.avatar) {
-      newData = { ...newData, avatar };
-    }
-    localStorage.setItem('accessToken', JSON.stringify(newData));
-    console.log(newData);
-    reset();
   };
+  // };
 
   return (
     <form className={styles.editProfileForm} onSubmit={handleSubmit(onSubmit)}>
@@ -97,11 +96,7 @@ const ProfileEdit = () => {
         <input
           id="image"
           type="text"
-          {...register('avatarUrl', {
-            pattern: {
-              value: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg|webp))$/i,
-            },
-          })}
+          {...register('image')}
           placeholder="Avatar image"
         />
       </label>

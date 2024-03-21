@@ -7,6 +7,11 @@ import { userLogin } from '../../context/LoginContext';
 import { useGlobal } from '../../context/GlobalContext';
 
 export default function Header() {
+  const convertAvatar = (avatar) => {
+    const decodedAvatarUrl = decodeURIComponent(avatar);
+    return decodedAvatarUrl;
+  };
+
   const { loggedIn, setLoggedIn } = useGlobal();
   const { storedData, updateStoredData } = userLogin();
 
@@ -33,8 +38,10 @@ export default function Header() {
             <Link to="account/createpost" className={styles.signup}>Create article</Link>
             <div className={styles.profileContainer}>
               <Link to="account/profileedit" className={styles.username}>
-                {storedData?.user?.username}
-                <img src={storedData?.user?.image} alt="John Doe" className={styles.picture} />
+                <div className={styles['container-flex']}>
+                  {storedData?.user?.username}
+                  <img src={convertAvatar(storedData.user.image)} alt="User Avatar" />
+                </div>
               </Link>
             </div>
             <Link

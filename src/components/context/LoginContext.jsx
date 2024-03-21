@@ -4,11 +4,13 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { message } from 'antd';
 import Spin from '../app/spin/Spin';
+import { useGlobal } from './GlobalContext';
 
 const LoginningContext = createContext();
 
 export function LoginProvider({ children }) {
   const url = 'https://api.realworld.io/api/users/login';
+  const { setLoggedIn } = useGlobal();
   const [storedData, setStoredData] = useState(null);
   const [isLogin, setLogin] = useState(false);
 
@@ -37,12 +39,10 @@ export function LoginProvider({ children }) {
         throw new Error('Logining troubles');
       }
       const data = await response.json();
-
       if (data && Object.prototype.hasOwnProperty.call(data, 'user')) {
-        console.log(Object(data));
         localStorage.setItem('accessToken', JSON.stringify(data));
         setStoredData(data);
-        window.location.href = '/';
+        setLoggedIn(true);
       } else {
         message.error('Invalid data received');
       }

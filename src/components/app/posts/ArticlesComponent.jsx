@@ -32,7 +32,6 @@ const ArticlesComponent = () => {
 
   return (
     <div className={styles.container}>
-      {/* {console.log(articles)} */}
       {articles.map((article) => (
         <Link
           key={article.slug}

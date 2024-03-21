@@ -1,21 +1,24 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable arrow-body-style */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './header.module.scss';
+import { userLogin } from '../../context/LoginContext';
+import { useGlobal } from '../../context/GlobalContext';
 
 export default function Header() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const { loggedIn, setLoggedIn } = useGlobal();
+  const { storedData, updateStoredData } = userLogin();
 
-  const logining = () => {
-    setLoggedIn('');
-  };
-
-  console.log(logining);
-
-  // const loginout = () => {
-  //   setLoggedIn('');
-  // };
+  useEffect(() => {
+    const storedUserData = localStorage.getItem('accessToken');
+    if (storedUserData) {
+      updateStoredData(JSON.parse(storedUserData));
+    }
+    if (!loggedIn) {
+      localStorage.clear();
+    }
+  }, [loggedIn]);
 
   return (
     <header className={styles.container}>
@@ -25,16 +28,19 @@ export default function Header() {
         </div>
       </Link>
       <div className={styles['container-flex']}>
-        {loggedIn ? (
+        {loggedIn && storedData?.user ? (
           <>
             <Link to="account/createpost" className={styles.signup}>Create article</Link>
             <div className={styles.profileContainer}>
-              <Link to="account/profileedit" className={styles.username}>John Doe</Link>
-              <img src="path_to_image.jpg" alt="John Doe" className={styles.picture} />
+              <Link to="account/profileedit" className={styles.username}>
+                {storedData?.user?.username}
+                <img src={storedData?.user?.image} alt="John Doe" className={styles.picture} />
+              </Link>
             </div>
             <Link
               to="/"
               className={styles['log-out']}
+              onClick={() => setLoggedIn(false)}
             >
               Log Out
             </Link>

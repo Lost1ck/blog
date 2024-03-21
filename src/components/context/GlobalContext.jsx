@@ -5,6 +5,7 @@ import React, { createContext, useState, useEffect } from 'react';
 const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
+  const [loggedIn, setLoggedIn] = useState(true);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -42,7 +43,7 @@ export const GlobalProvider = ({ children }) => {
 
   return (
     <GlobalContext.Provider value={{
-      isOnline, articles, loading, error, fetchArticles, totalPages,
+      isOnline, articles, loading, error, fetchArticles, totalPages, setLoggedIn, loggedIn,
     }}
     >
       {children}

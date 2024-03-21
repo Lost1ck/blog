@@ -2,10 +2,15 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable react/prop-types */
 import React, { createContext, useState } from 'react';
+import { message } from 'antd';
+import Spin from '../app/spin/Spin';
+import { LoginProvider } from './LoginContext';
 
 const RegistrationContext = createContext();
 
 export function RegistrationProvider({ children }) {
+  const { setStoredData } = LoginProvider;
+  const [isLoging, setLoging] = useState(false);
   const [userReg, setUserReg] = useState({
     username: '',
     email: '',
@@ -15,6 +20,7 @@ export function RegistrationProvider({ children }) {
 
   const fetchRegistration = async function sendUserToServer(userData) {
     try {
+      setLoging(true);
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -26,18 +32,27 @@ export function RegistrationProvider({ children }) {
         throw new Error('Registration troubles');
       }
       const data = await response.json();
-      if (data) {
-        window.location.href = '/signin';
+      if (data && Object.prototype.hasOwnProperty.call(data, 'user')) {
+        localStorage.setItem('accessToken', JSON.stringify(data));
+        setStoredData(data);
+        window.location.href = '/';
+      } else {
+        message.error('Invalid data received');
       }
-      // console.log(data);
     } catch (err) {
-      console.log(err);
+      message.error('Registraion error');
+    } finally {
+      setLoging(false);
     }
   };
 
   return (
     <RegistrationContext.Provider value={{ userReg, setUserReg, fetchRegistration }}>
-      {children}
+      {isLoging ? (
+        <Spin />
+      ) : (
+        <div>{ children }</div>
+      )}
     </RegistrationContext.Provider>
   );
 }

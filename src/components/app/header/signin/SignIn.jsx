@@ -1,21 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import styles from './signin.module.scss';
 import { userLogin } from '../../../context/LoginContext';
 
 const SignIn = () => {
-  const [userLog, setUserLog] = useState({
-    email: '',
-    password: '',
-  });
-
   const { fetchLoggining } = userLogin();
-
-  console.log(userLog);
-
   const {
     register, handleSubmit, formState: { errors }, reset,
   } = useForm();
@@ -27,8 +19,6 @@ const SignIn = () => {
       email, password,
     };
 
-    setUserLog(userData);
-    console.log(userData);
     await fetchLoggining(userData);
     reset();
   };
@@ -82,7 +72,6 @@ const SignIn = () => {
         </button>
         <p className={styles['signup-text']}>
           Dont have an account?
-          {' '}
           <Link to="/signup" className={styles.text}>
             Sign Up.
           </Link>

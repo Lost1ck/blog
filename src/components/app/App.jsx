@@ -16,6 +16,8 @@ import Nointernet from './nointernet/Nointernet';
 import SinglePage from './singlepage/SinglePage';
 import { RegistrationProvider } from '../context/RegistrationContext';
 import { LoginProvider } from '../context/LoginContext';
+import PrivateRoute from './privateRoute/PrivateRoute';
+import PublicRoute from './publicRoute/PublicRoute';
 
 const AppContent = () => {
   const { isOnline } = useGlobal();
@@ -26,10 +28,10 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Content />} />
         <Route path="articles/:slug" element={<SinglePage />} />
-        <Route path="account/createpost" element={<CreatePost />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="account/profileedit" element={<ProfileEdit />} />
+        <Route path="account/createpost" element={<PrivateRoute><CreatePost /></PrivateRoute>} />
+        <Route path="account/profileedit" element={<PrivateRoute><ProfileEdit /></PrivateRoute>} />
+        <Route path="/signup" element={<PublicRoute><SignUp /></PublicRoute>} />
+        <Route path="/signin" element={<PublicRoute><SignIn /></PublicRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

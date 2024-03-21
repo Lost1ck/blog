@@ -1,4 +1,6 @@
 
+reg =  /^[a-z][a-z0-9]*$/
+
 "user123112@example.com"
 id
 : 

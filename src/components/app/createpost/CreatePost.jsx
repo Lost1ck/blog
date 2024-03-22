@@ -1,81 +1,123 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import React from 'react';
+import { useForm, useFieldArray } from 'react-hook-form';
 import styles from './createpost.module.scss';
 
 export default function CreatePost() {
-  const [title, setTitle] = useState('');
-  const [shortDescription, setShortDescription] = useState('');
-  const [text, setText] = useState('');
-  const [tags, setTags] = useState([]);
-  const [newTag, setNewTag] = useState('');
+  const {
+    register, control, formState: { errors }, handleSubmit, setValue, getValues, reset,
+  } = useForm({
+    defaultValues: {
+      title: '',
+      shortDescription: '',
+      text: '',
+      tags: '',
+    },
+  });
 
-  const handleTagDelete = (index) => {
-    setTags(tags.filter((_, i) => i !== index));
-  };
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'tags',
+  });
 
   const handleTagAdd = () => {
-    if (newTag && !tags.includes(newTag)) {
-      setTags([...tags, newTag]);
-      setNewTag('');
+    const newTag = getValues('newTag');
+    if (newTag && !fields.some(({ name }) => name === newTag)) {
+      append({ name: newTag });
+      setValue('newTag', '');
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // server
-  };
-
-  const handleDelete = () => {
-    setNewTag('');
+  const onSubmit = (data) => {
+    console.log(data);
+    reset();
   };
 
   return (
     <div className={styles.articleForm}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Create new article</h2>
-        <label>
+        <label htmlFor="title" className={styles.title}>
           Title
           <input
+            id="title"
             placeholder="Title"
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className={styles.input}
+            {...register('title', {
+              required: true,
+              minLength: {
+                value: 6,
+                message: 'Min length is 6',
+              },
+              maxLength: {
+                value: 50,
+                message: 'Max characters 50',
+              },
+              pattern: {
+                value: /^[a-z0-9]+$/,
+                message: 'Only lowercase letters and numbers are allowed',
+              },
+            })}
+            className={errors.title ? styles.error : ''}
           />
+          {errors.title && <p className={styles['error-message']}>{errors.title.message}</p>}
         </label>
-        <label>
+        <label htmlFor="description">
           Short description
           <input
+            id="description"
             placeholder="Short description"
             type="text"
-            value={shortDescription}
-            onChange={(e) => setShortDescription(e.target.value)}
-            className={styles.input}
+            {...register('shortDescription', {
+              required: true,
+              minLength: {
+                value: 6,
+                message: 'Min length is 6',
+              },
+              maxLength: {
+                value: 50,
+                message: 'Max characters 50',
+              },
+            })}
+            className={errors.shortDescription ? styles.error : ''}
           />
+          {errors.shortDescription && <p>{errors.shortDescription.message}</p>}
         </label>
-        <label>
+        <label htmlFor="text">
           Text
           <textarea
+            id="text"
             placeholder="Text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            className={styles.textarea}
+            {...register('text', {
+              required: true,
+              minLength: {
+                value: 6,
+                message: 'Min length is 6',
+              },
+              maxLength: {
+                value: 5000,
+                message: 'Max characters 5000',
+              },
+            })}
+            className={errors.text ? styles.error : ''}
           />
+          {errors.text && <p>{errors.text.message}</p>}
         </label>
-        <label>
+        <label htmlFor="tags">
           Tags
-          {tags.map((tag, index) => (
-            <div key={tag.index} className={styles.tag}>
+          {fields.map((field, index) => (
+            <div key={field.id} className={styles.tag}>
               <div className={styles['tag-input-show']}>
                 <input
+                  id="tags"
                   type="text"
-                  value={tag}
+                  {...register(`tags.${index}.name`)}
                   readOnly
                 />
               </div>
               <button
                 type="button"
-                onClick={() => handleTagDelete(index)}
+                onClick={() => remove(index)}
                 className={styles['delete-tag']}
               >
                 Delete
@@ -87,17 +129,27 @@ export default function CreatePost() {
               <input
                 placeholder="Tag"
                 type="text"
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
+                {...register('newTag', {
+                  minLength: {
+                    value: 6,
+                    message: 'Min length is 6',
+                  },
+                  maxLength: {
+                    value: 15,
+                    message: 'Max length is 15',
+                  },
+                })}
                 onKeyDown={(e) => e.key === 'Enter' && handleTagAdd()}
+                className={errors.newTag ? styles.error : ''}
               />
+              {errors.newTag && <p>{errors.newTag.message}</p>}
             </div>
             <button
               type="button"
-              onClick={handleDelete}
+              onClick={() => setValue('newTag', '')}
               className={styles['delete-tag']}
             >
-              Delete
+              Clear
             </button>
             <button
               type="button"

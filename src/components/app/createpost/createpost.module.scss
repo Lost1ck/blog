@@ -14,10 +14,6 @@ $border-radius: 4px;
   cursor: pointer;
   font-size: $font-size;
   outline: none;
-
-  // &:hover {
-  // background-color: darken($tag-background, 10%);
-  // }
 }
 
 .articleForm {
@@ -130,4 +126,12 @@ $border-radius: 4px;
   width: 319px;
   background-color: $tag-background;
   cursor: pointer;
+}
+
+.error {
+  border: 2px solid $delete-color !important;
+}
+
+.error-message {
+  color: $delete-color;
 }

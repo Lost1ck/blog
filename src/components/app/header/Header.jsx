@@ -17,13 +17,15 @@ export default function Header() {
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('accessToken');
-    if (storedUserData) {
+    if (loggedIn === true && storedUserData) {
       updateStoredData(JSON.parse(storedUserData));
     }
-    if (!loggedIn) {
-      localStorage.clear();
-    }
-  }, [loggedIn]);
+  }, []);
+
+  const clearData = () => {
+    localStorage.removeItem('accessToken');
+    setLoggedIn(false);
+  };
 
   return (
     <header className={styles.container}>
@@ -47,7 +49,7 @@ export default function Header() {
             <Link
               to="/"
               className={styles['log-out']}
-              onClick={() => setLoggedIn(false)}
+              onClick={() => clearData()}
             >
               Log Out
             </Link>

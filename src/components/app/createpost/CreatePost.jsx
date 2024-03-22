@@ -81,7 +81,7 @@ export default function CreatePost() {
             })}
             className={errors.shortDescription ? styles.error : ''}
           />
-          {errors.shortDescription && <p>{errors.shortDescription.message}</p>}
+          {errors.shortDescription && <p className={styles['error-message']}>{errors.shortDescription.message}</p>}
         </label>
         <label htmlFor="text">
           Text
@@ -101,20 +101,22 @@ export default function CreatePost() {
             })}
             className={errors.text ? styles.error : ''}
           />
-          {errors.text && <p>{errors.text.message}</p>}
+          {errors.text && <p className={styles['error-message']}>{errors.text.message}</p>}
         </label>
         <label htmlFor="tags">
           Tags
           {fields.map((field, index) => (
             <div key={field.id} className={styles.tag}>
-              <div className={styles['tag-input-show']}>
+              <label htmlFor={`tag-${index}`} className={styles['tag-input-show']}>
+                Tag
+                {index + 1}
                 <input
-                  id="tags"
+                  id={`tag-${index}`}
                   type="text"
                   {...register(`tags.${index}.name`)}
                   readOnly
                 />
-              </div>
+              </label>
               <button
                 type="button"
                 onClick={() => remove(index)}
@@ -142,7 +144,7 @@ export default function CreatePost() {
                 onKeyDown={(e) => e.key === 'Enter' && handleTagAdd()}
                 className={errors.newTag ? styles.error : ''}
               />
-              {errors.newTag && <p>{errors.newTag.message}</p>}
+              {errors.newTag && <p className={styles['error-message']}>{errors.newTag.message}</p>}
             </div>
             <button
               type="button"

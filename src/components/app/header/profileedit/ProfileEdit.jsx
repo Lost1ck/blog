@@ -18,20 +18,20 @@ const ProfileEdit = () => {
     } = data;
     const newData = {};
 
-    if (username !== local.user.username) newData.username = username;
-    if (newPassword !== local.user.password) newData.password = newPassword;
-    if (email !== local.user.email) newData.email = email;
-    if (image !== local.user.image) newData.image = image;
-
-    // if (Object.keys(newData).length > 0) {
-    const updateResult = await fetchNewUserInfo(newData);
-    if (updateResult && !updateResult.errors) {
-      const updatedData = { ...local.user, ...newData };
-      localStorage.setItem('accessToken', JSON.stringify({ user: updatedData }));
-      reset();
+    if (local.user.username !== username) newData.username = username;
+    if (local.user.password !== newPassword) newData.password = newPassword;
+    if (local.user.email !== email) newData.email = email;
+    if (local.user.image !== image) newData.image = image;
+    if (Object.keys(newData).length > 0) {
+      console.log(newData, 'after');
+      const updateResult = await fetchNewUserInfo(newData);
+      if (updateResult && !updateResult.errors) {
+        const updatedData = { ...local.user, ...newData };
+        localStorage.setItem('accessToken', JSON.stringify({ user: updatedData }));
+        reset();
+      }
     }
   };
-  // };
 
   return (
     <form className={styles.editProfileForm} onSubmit={handleSubmit(onSubmit)}>
@@ -79,6 +79,7 @@ const ProfileEdit = () => {
           id="password"
           type="password"
           {...register('password', {
+            required: true,
             minLength: {
               value: 6,
               message: 'Please enter your new password',
@@ -96,7 +97,10 @@ const ProfileEdit = () => {
         <input
           id="image"
           type="text"
-          {...register('image')}
+          {...register('image', {
+            required: true,
+            value: local.user.image,
+          })}
           placeholder="Avatar image"
         />
       </label>

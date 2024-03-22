@@ -1,18 +1,19 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-no-constructed-context-values */
+import React, {
+  useContext, createContext, useState, useMemo,
+} from 'react';
 import { message, Spin } from 'antd';
-import React, { useContext, createContext, useState } from 'react';
 
 const UpdateUserDataContext = createContext();
 
 export const UpdateUserDataProvider = ({ children }) => {
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchNewUserInfo = async (userData) => {
-    setIsUpdating(true);
+    setIsLoading(true);
     try {
       const { token } = JSON.parse(localStorage.getItem('accessToken')).user;
-      const response = await fetch('https://api.realworld.io/api/user', {
+      const response = await fetch('https://blog.kata.academy/api/user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -29,13 +30,17 @@ export const UpdateUserDataProvider = ({ children }) => {
       message.error(error.toString());
       return null;
     } finally {
-      setIsUpdating(false);
+      setIsLoading(false);
     }
   };
 
+  const fetchUserNewInfo = useMemo(() => ({
+    fetchNewUserInfo,
+  }), []);
+
   return (
-    <UpdateUserDataContext.Provider value={{ fetchNewUserInfo, isUpdating }}>
-      {isUpdating ? <Spin /> : children}
+    <UpdateUserDataContext.Provider value={fetchUserNewInfo}>
+      {isLoading ? <Spin /> : children}
     </UpdateUserDataContext.Provider>
   );
 };

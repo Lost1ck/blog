@@ -1,7 +1,7 @@
-/* eslint-disable react/jsx-no-constructed-context-values */
-/* eslint-disable import/prefer-default-export */
 /* eslint-disable react/prop-types */
-import React, { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext, useState, useEffect, useMemo,
+} from 'react';
 import { message } from 'antd';
 import Spin from '../app/spin/Spin';
 import { useGlobal } from './GlobalContext';
@@ -9,15 +9,16 @@ import { useGlobal } from './GlobalContext';
 const LoginningContext = createContext();
 
 export function LoginProvider({ children }) {
-  const url = 'https://api.realworld.io/api/users/login';
+  const url = 'https://blog.kata.academy/api/users/login';
   const { setLoggedIn } = useGlobal();
-  const [storedData, setStoredData] = useState(null);
+  const [storedData, setStoredData] = useState('');
   const [isLogin, setLogin] = useState(false);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('accessToken');
     if (storedUserData) {
       setStoredData(JSON.parse(storedUserData));
+      setLoggedIn(true);
     }
   }, []);
 
@@ -41,7 +42,7 @@ export function LoginProvider({ children }) {
       const data = await response.json();
       if (data && Object.prototype.hasOwnProperty.call(data, 'user')) {
         localStorage.setItem('accessToken', JSON.stringify(data));
-        setStoredData(data);
+        // setStoredData(data);
         setLoggedIn(true);
       } else {
         message.error('Invalid data received');
@@ -53,11 +54,15 @@ export function LoginProvider({ children }) {
     }
   };
 
+  const value = useMemo(() => ({
+    fetchLoggining,
+    storedData,
+    setStoredData,
+    updateStoredData,
+  }), [fetchLoggining, storedData, setStoredData, updateStoredData]);
+
   return (
-    <LoginningContext.Provider value={{
-      fetchLoggining, storedData, setStoredData, updateStoredData,
-    }}
-    >
+    <LoginningContext.Provider value={value}>
       {isLogin ? (
         <Spin />
       ) : (

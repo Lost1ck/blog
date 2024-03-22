@@ -1,6 +1,7 @@
-/* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable react/prop-types */
-import React, { createContext, useState, useEffect } from 'react';
+import React, {
+  createContext, useState, useEffect, useContext, useMemo,
+} from 'react';
 
 const GlobalContext = createContext();
 
@@ -10,7 +11,7 @@ export const GlobalProvider = ({ children }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = React.useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const updateOnlineStatus = () => setIsOnline(navigator.onLine);
@@ -22,7 +23,7 @@ export const GlobalProvider = ({ children }) => {
       window.removeEventListener('online', updateOnlineStatus);
       window.removeEventListener('offline', updateOnlineStatus);
     };
-  }, [isOnline]);
+  }, []);
 
   const fetchArticles = async (page = 1) => {
     setLoading(true);
@@ -30,7 +31,7 @@ export const GlobalProvider = ({ children }) => {
     const limit = 5;
     const offset = (page - 1) * limit;
     try {
-      const response = await fetch(`https://api.realworld.io/api/articles?limit=${limit}&offset=${offset}`);
+      const response = await fetch(`https://blog.kata.academy/api/articles?limit=${limit}&offset=${offset}`);
       const data = await response.json();
       setArticles(data.articles);
       setTotalPages(Math.ceil(data.articlesCount / limit));
@@ -41,14 +42,15 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const value = useMemo(() => ({
+    isOnline, articles, loading, error, fetchArticles, totalPages, setLoggedIn, loggedIn,
+  }), [isOnline, articles, loading, error, totalPages, loggedIn]);
+
   return (
-    <GlobalContext.Provider value={{
-      isOnline, articles, loading, error, fetchArticles, totalPages, setLoggedIn, loggedIn,
-    }}
-    >
+    <GlobalContext.Provider value={value}>
       {children}
     </GlobalContext.Provider>
   );
 };
 
-export const useGlobal = () => React.useContext(GlobalContext);
+export const useGlobal = () => useContext(GlobalContext);

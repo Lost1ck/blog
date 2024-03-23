@@ -1,3 +1,5 @@
+$delete-color: #f00;
+
 .container {
   display: flex;
   align-items: center;
@@ -35,6 +37,7 @@
 }
 
 .title {
+  cursor: default;
   font-size: 20px;
   color: #366EFF;
   line-height: 28px;
@@ -77,9 +80,10 @@
 }
 
 .avatar-block {
-  padding: 10px;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 15px;
 }
 
 .article-block {
@@ -106,4 +110,47 @@
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
+}
+
+
+.btn-delete {
+  border-radius: 5px;
+  border: 1px solid $delete-color !important;
+  outline: none;
+  background-color: #fff;
+  color: $delete-color;
+  font-size: 16px;
+  margin-right: 10px;
+  line-height: 28px;
+  padding: 5px 20px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.btn-edit {
+  background-color: #fff;
+  outline: none;
+  font-weight: 400;
+  line-height: 28px;
+  border-radius: 5px;
+  color: #52C41A;
+  border: 1.5px solid #52C41A;
+  line-height: 28px;
+  padding: 5px 20px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }

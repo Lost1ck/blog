@@ -47,13 +47,6 @@ const SinglePage = () => {
     return text;
   };
 
-  // const sizeOfItems = (items, size) => {
-  //   if (items.length > size) {
-  //     return items.slice(0, size);
-  //   }
-  //   return items;
-  // };
-
   return (
     <div className={styles.container}>
       <article
@@ -86,7 +79,7 @@ const SinglePage = () => {
           <div className={styles['avatar-block']}>
             <div>
               <p style={{ fontSize: '18px' }}>{shortDescription(article.author.username, 15)}</p>
-              <div style={{ fontSize: '12px', color: 'color: #00000080' }}>{convertDate(article.updatedAt)}</div>
+              <div style={{ fontSize: '12px', color: '#00000080' }}>{convertDate(article.updatedAt)}</div>
             </div>
             <div className={styles['article-block']}>
               <img className={styles['article-image']} src={article.author.image} alt={article.title || 'Article image'} />

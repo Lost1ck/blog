@@ -107,3 +107,12 @@
   text-overflow: ellipsis;
   word-break: break-word;
 }
+
+.custom-button {
+  display: flex;
+  cursor: pointer;
+  outline: none;
+  background-color: #fff;
+  border: none;
+  align-items: center;
+}

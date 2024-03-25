@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { message } from 'antd';
 import styles from './style.module.scss';
 import Spinner from '../spin/Spin';
 import Noarticles from '../noarticles/Noarticles';
@@ -18,6 +19,8 @@ const SinglePage = () => {
   const {
     loading, error, loggedIn,
   } = useGlobal();
+
+  const currentUser = JSON.parse(localStorage.getItem('accessToken')).user.username;
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -93,7 +96,7 @@ const SinglePage = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (e) {
-      throw new Error('something went wrong');
+      message.error('you cant delete this article');
     }
   };
 
@@ -147,10 +150,10 @@ const SinglePage = () => {
             </div>
           </div>
           <div className={styles['btns-edit']}>
-            {loggedIn ? (
+            {loggedIn && article.author.username === currentUser ? (
               <div>
-                <button type="submit" className={styles['btn-delete']} onClick={() => handleDeleteArticle(article.slug)}>Delete</button>
-                <button type="submit" className={styles['btn-edit']}>Edit</button>
+                <button type="button" className={styles['btn-delete']} onClick={() => handleDeleteArticle(article.slug)}>Delete</button>
+                <button type="button" className={styles['btn-edit']}>Edit</button>
               </div>
             ) : (
               ''

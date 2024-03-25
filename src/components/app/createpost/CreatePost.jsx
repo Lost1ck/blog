@@ -38,7 +38,12 @@ export default function CreatePost() {
       tags: data.tags.map((tag) => tag.name),
     };
     fetchCreateArticle(formattedData);
-    reset();
+    reset({
+      title: '',
+      description: '',
+      body: '',
+      tags: [],
+    });
   };
 
   return (
@@ -46,7 +51,7 @@ export default function CreatePost() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Create new article</h2>
         <label htmlFor="title" className={styles.title}>
-          Title
+          <h3>Title</h3>
           <input
             id="title"
             placeholder="Title"
@@ -71,7 +76,7 @@ export default function CreatePost() {
           {errors.title && <p className={styles['error-message']}>{errors.title.message}</p>}
         </label>
         <label htmlFor="description">
-          Short description
+          <h3>Short description</h3>
           <input
             id="description"
             placeholder="Short description"
@@ -92,7 +97,7 @@ export default function CreatePost() {
           {errors.description && <p className={styles['error-message']}>{errors.description.message}</p>}
         </label>
         <label htmlFor="body">
-          Text
+          <h3>Text</h3>
           <textarea
             id="body"
             placeholder="Text"
@@ -112,12 +117,10 @@ export default function CreatePost() {
           {errors.body && <p className={styles['error-message']}>{errors.body.message}</p>}
         </label>
         <label htmlFor="tags">
-          Tags
+          <h3>Tags</h3>
           {fields.map((field, index) => (
             <div key={field.id} className={styles.tag}>
               <label htmlFor={`tag-${index}`} className={styles['tag-input-show']}>
-                Tag
-                {index + 1}
                 <input
                   id={`tag-${index}`}
                   type="text"

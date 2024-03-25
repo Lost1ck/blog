@@ -37,13 +37,15 @@ export const GlobalProvider = ({ children }) => {
     const offset = (page - 1) * limit;
     const endpoint = `https://blog.kata.academy/api/articles?limit=${limit}&offset=${offset}`;
     try {
-      const { token } = JSON.parse(localStorage.getItem('accessToken')).user;
-      const response = await fetch(endpoint, {
-        headers: {
-          Authorization: `Token ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const tokenData = localStorage.getItem('accessToken');
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      if (tokenData) {
+        const { token } = JSON.parse(tokenData).user;
+        headers.Authorization = `Token ${token}`;
+      }
+      const response = await fetch(endpoint, { headers });
       const data = await response.json();
       setArticles(data.articles);
       setTotalPages(Math.ceil(data.articlesCount / limit));

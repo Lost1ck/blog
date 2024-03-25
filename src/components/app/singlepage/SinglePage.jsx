@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import styles from './style.module.scss';
 import Spinner from '../spin/Spin';
 import Noarticles from '../noarticles/Noarticles';
@@ -98,8 +98,20 @@ const SinglePage = () => {
     }
   };
 
-  const handleDeleteArticle = (articlee) => {
-    deleteArticle(articlee);
+  const handleDeleteArticle = (articleSlug) => {
+    Modal.confirm({
+      title: 'Вы уверены, что хотите удалить эту статью?',
+      content: 'Это действие нельзя будет отменить.',
+      okText: 'Да',
+      okType: 'danger',
+      cancelText: 'Нет',
+      onOk() {
+        deleteArticle(articleSlug);
+      },
+      onCancel() {
+        console.log('Отмена удаления');
+      },
+    });
   };
 
   return (

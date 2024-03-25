@@ -49,8 +49,10 @@ const SinglePage = () => {
   };
 
   const handleLikeClick = async () => {
-    if (article) {
+    if (loggedIn) {
       await handleLike(article, loggedIn, setArticles);
+    } else {
+      message.error('Please log in to like articles.');
     }
   };
 
@@ -67,6 +69,8 @@ const SinglePage = () => {
     }
     return text;
   };
+
+  console.log(article);
 
   const deleteArticle = async (articlew) => {
     const slugForDelete = slug;
@@ -115,7 +119,7 @@ const SinglePage = () => {
               className={`${styles.flex} ${styles['custom-button']}`}
               onClick={handleLikeClick}
             >
-              <img src={article.favorited ? unLogo : logo} className={styles['like-article']} alt="like article" />
+              <img src={article.favorited ? logo : unLogo} className={styles['like-article']} alt="like article" />
               <div>{article.favoritesCount}</div>
             </button>
           </div>

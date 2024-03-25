@@ -48,15 +48,17 @@ const ArticlesComponent = () => {
   if (loading) return <Spinner />;
   if (error) return <Noarticles />;
 
+  console.log(articles);
+
   return (
     <div className={styles.container}>
-      {console.log(articles)}
       {articles.map((article) => (
         <article
           key={article.slug}
           style={{ color: 'black' }}
           className={styles.article}
         >
+          {/* Like is here */}
           <div>
             <div>
               <div className={styles.flex}>

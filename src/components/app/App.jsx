@@ -19,6 +19,7 @@ import { LoginProvider } from '../context/LoginContext';
 import PrivateRoute from './privateRoute/PrivateRoute';
 import PublicRoute from './publicRoute/PublicRoute';
 import { UpdateUserDataProvider } from '../context/UserUpdate';
+import { CreateAnArticleProvider } from '../context/CreateAnArticle';
 
 const AppContent = () => {
   const { isOnline } = useGlobal();
@@ -47,7 +48,9 @@ const App = () => (
       <RegistrationProvider>
         <LoginProvider>
           <UpdateUserDataProvider>
-            <AppContent />
+            <CreateAnArticleProvider>
+              <AppContent />
+            </CreateAnArticleProvider>
           </UpdateUserDataProvider>
         </LoginProvider>
       </RegistrationProvider>

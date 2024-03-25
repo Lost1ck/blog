@@ -2,16 +2,18 @@
 import React from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import styles from './createpost.module.scss';
+import { useCreate } from '../../context/CreateAnArticle';
 
 export default function CreatePost() {
+  const { fetchCreateArticle } = useCreate();
   const {
     register, control, formState: { errors }, handleSubmit, setValue, getValues, reset,
   } = useForm({
     defaultValues: {
       title: '',
-      shortDescription: '',
-      text: '',
-      tags: '',
+      description: '',
+      body: '',
+      tagList: [],
     },
   });
 
@@ -29,7 +31,13 @@ export default function CreatePost() {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
+    const formattedData = {
+      title: data.title,
+      description: data.description,
+      body: data.body,
+      tags: data.tags.map((tag) => tag.name),
+    };
+    fetchCreateArticle(formattedData);
     reset();
   };
 
@@ -68,7 +76,7 @@ export default function CreatePost() {
             id="description"
             placeholder="Short description"
             type="text"
-            {...register('shortDescription', {
+            {...register('description', {
               required: true,
               minLength: {
                 value: 6,
@@ -79,16 +87,16 @@ export default function CreatePost() {
                 message: 'Max characters 50',
               },
             })}
-            className={errors.shortDescription ? styles.error : ''}
+            className={errors.description ? styles.error : ''}
           />
-          {errors.shortDescription && <p className={styles['error-message']}>{errors.shortDescription.message}</p>}
+          {errors.description && <p className={styles['error-message']}>{errors.description.message}</p>}
         </label>
-        <label htmlFor="text">
+        <label htmlFor="body">
           Text
           <textarea
-            id="text"
+            id="body"
             placeholder="Text"
-            {...register('text', {
+            {...register('body', {
               required: true,
               minLength: {
                 value: 6,
@@ -99,9 +107,9 @@ export default function CreatePost() {
                 message: 'Max characters 5000',
               },
             })}
-            className={errors.text ? styles.error : ''}
+            className={errors.body ? styles.error : ''}
           />
-          {errors.text && <p className={styles['error-message']}>{errors.text.message}</p>}
+          {errors.body && <p className={styles['error-message']}>{errors.body.message}</p>}
         </label>
         <label htmlFor="tags">
           Tags
@@ -148,7 +156,7 @@ export default function CreatePost() {
             </div>
             <button
               type="button"
-              onClick={() => setValue('newTag', '')}
+              onClick={() => setValue('tags', '')}
               className={styles['delete-tag']}
             >
               Clear

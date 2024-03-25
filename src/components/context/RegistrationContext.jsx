@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { createContext, useState, useMemo } from 'react';
-// import { message } from 'antd';
 import Spin from '../app/spin/Spin';
 import { useGlobal } from './GlobalContext';
 
@@ -28,20 +27,14 @@ export function RegistrationProvider({ children }) {
         },
         body: JSON.stringify({ user: userData }),
       });
-      console.log(response);
       const data = await response.json();
-      // if (!response.ok) {
-      //   console.log('Response Data:', data);
-      //   throw new Error(`Registration troubles: ${response.status}`);
-      // }
       try {
         localStorage.setItem('accessToken', JSON.stringify(data));
-        console.log(localStorage, 'local registration');
         setLocal(localStorage);
         setLoggedIn(true);
         // window.location.href = '/';
       } catch (e) {
-        console.log(e);
+        throw new Error(`Error, ${e.message}`);
       }
     } catch (err) {
       throw new Error(err);

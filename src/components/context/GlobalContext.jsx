@@ -25,13 +25,25 @@ export const GlobalProvider = ({ children }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setLoggedIn(!!token);
+  }, []);
+
   const fetchArticles = async (page = 1) => {
     setLoading(true);
     setError(null);
     const limit = 5;
     const offset = (page - 1) * limit;
+    const endpoint = `https://blog.kata.academy/api/articles?limit=${limit}&offset=${offset}`;
     try {
-      const response = await fetch(`https://blog.kata.academy/api/articles?limit=${limit}&offset=${offset}`);
+      const { token } = JSON.parse(localStorage.getItem('accessToken')).user;
+      const response = await fetch(endpoint, {
+        headers: {
+          Authorization: `Token ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
       const data = await response.json();
       setArticles(data.articles);
       setTotalPages(Math.ceil(data.articlesCount / limit));
@@ -43,7 +55,15 @@ export const GlobalProvider = ({ children }) => {
   };
 
   const value = useMemo(() => ({
-    isOnline, articles, loading, error, fetchArticles, totalPages, setLoggedIn, loggedIn,
+    isOnline,
+    articles,
+    loading,
+    error,
+    fetchArticles,
+    totalPages,
+    setLoggedIn,
+    loggedIn,
+    setArticles,
   }), [isOnline, articles, loading, error, totalPages, loggedIn]);
 
   return (

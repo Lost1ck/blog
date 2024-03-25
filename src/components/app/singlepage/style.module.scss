@@ -1,5 +1,4 @@
 $delete-color: #f00;
-
 .container {
   display: flex;
   align-items: center;
@@ -37,7 +36,6 @@ $delete-color: #f00;
 }
 
 .title {
-  cursor: default;
   font-size: 20px;
   color: #366EFF;
   line-height: 28px;
@@ -80,10 +78,9 @@ $delete-color: #f00;
 }
 
 .avatar-block {
+  padding: 10px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 15px;
 }
 
 .article-block {
@@ -112,6 +109,14 @@ $delete-color: #f00;
   word-break: break-word;
 }
 
+.custom-button {
+  display: flex;
+  cursor: pointer;
+  outline: none;
+  background-color: #fff;
+  border: none;
+  align-items: center;
+}
 
 .btn-delete {
   border-radius: 5px;

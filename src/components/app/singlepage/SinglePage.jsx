@@ -2,13 +2,17 @@
 // SinglePage.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import styles from './style.module.scss';
 import Spinner from '../spin/Spin';
 import Noarticles from '../noarticles/Noarticles';
 import { useGlobal } from '../../context/GlobalContext';
 import logo from '../../../images/Vector.svg';
+import unLogo from '../../../images/unlike.svg';
+import { useUpdateUserData } from '../../context/UserUpdate';
 
 const SinglePage = () => {
+  const { handleLike } = useUpdateUserData();
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
   const {
@@ -33,6 +37,20 @@ const SinglePage = () => {
   if (loading) return <Spinner className={styles.spin} />;
   if (error) return <Noarticles />;
 
+  const setArticles = (updatedArticle) => {
+    setArticle((prevArticle) => ({
+      ...prevArticle,
+      favorited: updatedArticle.favorited,
+      favoritesCount: updatedArticle.favoritesCount,
+    }));
+  };
+
+  const handleLikeClick = async () => {
+    if (article) {
+      await handleLike(article, loggedIn, setArticles);
+    }
+  };
+
   const convertDate = (dateStr) => {
     const dateObj = new Date(dateStr);
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -47,6 +65,42 @@ const SinglePage = () => {
     return text;
   };
 
+  // const toStart = (data) => {
+  //   if (data) {
+  //     window.location.href = '/';
+  //   }
+  // };
+
+  const deleteArticle = async (articlew) => {
+    const slugForDelete = slug;
+    const url = `https://blog.kata.academy/api/articles/${slugForDelete}`;
+    const token = localStorage.getItem('accessToken');
+    const storage = JSON.parse(token).user.token;
+    try {
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Token ${storage}`,
+        },
+        body: articlew.body,
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      try {
+        window.location.href = '/';
+      } catch (e) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (e) {
+      throw new Error('something went wrong');
+    }
+  };
+
+  const handleDeleteArticle = (articlee) => {
+    deleteArticle(articlee);
+  };
+
   return (
     <div className={styles.container}>
       <article
@@ -54,16 +108,19 @@ const SinglePage = () => {
         style={{ color: 'black' }}
         className={styles.article}
       >
-        {console.log(article)}
         <div>
           <div className={styles.flex}>
             <div className={styles.title}>
-              {shortDescription(article.body, 15)}
+              {shortDescription(article.title, 15)}
             </div>
-            <div className={styles.flex}>
-              <img src={logo} className={styles['like-article']} alt="like article" />
+            <button
+              type="button"
+              className={`${styles.flex} ${styles['custom-button']}`}
+              onClick={handleLikeClick}
+            >
+              <img src={article.favorited ? unLogo : logo} className={styles['like-article']} alt="like article" />
               <div>{article.favoritesCount}</div>
-            </div>
+            </button>
           </div>
           <div className={styles.flex}>
             <div className={styles['tags-block']}>
@@ -79,7 +136,11 @@ const SinglePage = () => {
           <div className={styles['avatar-block']}>
             <div>
               <p style={{ fontSize: '18px' }}>{shortDescription(article.author.username, 15)}</p>
-              <div style={{ fontSize: '12px', color: '#00000080' }}>{convertDate(article.updatedAt)}</div>
+              <div
+                style={{ fontSize: '12px', color: '#00000080' }}
+              >
+                {convertDate(article.updatedAt)}
+              </div>
             </div>
             <div className={styles['article-block']}>
               <img className={styles['article-image']} src={article.author.image} alt={article.title || 'Article image'} />
@@ -88,7 +149,7 @@ const SinglePage = () => {
           <div className={styles['btns-edit']}>
             {loggedIn ? (
               <div>
-                <button type="submit" className={styles['btn-delete']}>Delete</button>
+                <button type="submit" className={styles['btn-delete']} onClick={() => handleDeleteArticle(article.slug)}>Delete</button>
                 <button type="submit" className={styles['btn-edit']}>Edit</button>
               </div>
             ) : (
@@ -97,8 +158,8 @@ const SinglePage = () => {
           </div>
         </div>
         <div style={{ width: '600px' }}>
-          <div>{shortDescription(article.title, 50)}</div>
           <div>{article.description}</div>
+          <ReactMarkdown>{shortDescription(article.body, 50)}</ReactMarkdown>
         </div>
       </article>
     </div>

@@ -8,30 +8,27 @@ import Spinner from '../spin/Spin';
 import Noarticles from '../noarticles/Noarticles';
 import { useGlobal } from '../../context/GlobalContext';
 import logo from '../../../images/Vector.svg';
+import unLogo from '../../../images/unlike.svg';
+import { useUpdateUserData } from '../../context/UserUpdate';
 
 const ArticlesComponent = () => {
+  const { handleLike } = useUpdateUserData();
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [likesInfo, setLikesInfo] = React.useState({});
 
   const {
-    fetchArticles, loading, articles, error, totalPages,
+    fetchArticles, loading, articles, error, totalPages, setArticles, loggedIn,
   } = useGlobal();
 
   useEffect(() => {
     fetchArticles(currentPage);
   }, [currentPage]);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handleLikeClick = async (article) => {
+    await handleLike(article, loggedIn, setArticles);
   };
 
-  if (loading) return <Spinner className={styles.spin} />;
-  if (error) return <Noarticles />;
-
-  const convertDate = (dateStr) => {
-    const dateObj = new Date(dateStr);
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return `${months[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const shortDescription = (text, size) => {
@@ -42,52 +39,18 @@ const ArticlesComponent = () => {
     return text;
   };
 
-  const { token } = JSON.parse(localStorage.getItem('accessToken')).user;
-
-  const handleLikeClick = async (slug, liked) => {
-    const method = liked ? 'DELETE' : 'POST';
-    try {
-      const response = await fetch(`https://blog.kata.academy/api/articles/${slug}/favorite`, {
-        method,
-        headers: {
-          Authorization: `Token ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-      console.log(data);
-      if (!response.ok) {
-        console.log(response);
-        throw new Error('Не удалось изменить лайк');
-      }
-      return {
-        slug,
-        favoritesCount: data.article.favoritesCount,
-        liked: method === 'POST',
-      };
-    } catch (e) {
-      console.error(e);
-      return null;
-    }
+  const convertDate = (dateStr) => {
+    const dateObj = new Date(dateStr);
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return `${months[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
   };
 
-  const handleLike = async (article) => {
-    const articleLikesInfo = likesInfo[article.slug] || {
-      favoritesCount: article
-        .favoritesCount,
-      liked: false,
-    };
-    const updatedLikesInfo = await handleLikeClick(article.slug, articleLikesInfo.liked);
-    if (updatedLikesInfo) {
-      setLikesInfo((prev) => ({
-        ...prev,
-        [article.slug]: updatedLikesInfo,
-      }));
-    }
-  };
+  if (loading) return <Spinner />;
+  if (error) return <Noarticles />;
 
   return (
     <div className={styles.container}>
+      {console.log(articles)}
       {articles.map((article) => (
         <article
           key={article.slug}
@@ -98,11 +61,14 @@ const ArticlesComponent = () => {
             <div>
               <div className={styles.flex}>
                 <Link to={`/articles/${article.slug}`} className={styles.title}>
-                  {article.author.slug}
-                  some text
+                  {shortDescription(article.title, 15)}
                 </Link>
-                <button type="submit" className={styles.flex && styles['custom-button']} onClick={() => handleLike(article)}>
-                  <img src={logo} className={styles['like-article']} alt="like article" />
+                <button
+                  type="button"
+                  className={`${styles.flex} ${styles['custom-button']}`}
+                  onClick={() => handleLikeClick(article)}
+                >
+                  <img src={article.favorited ? unLogo : logo} className={styles['like-article']} alt="like article" />
                   <div>{article.favoritesCount}</div>
                 </button>
               </div>
@@ -127,9 +93,8 @@ const ArticlesComponent = () => {
                 </div>
               </div>
             </div>
-            <div style={{ width: '600px' }}>
-              <div>{shortDescription(article.title, 50)}</div>
-              <div>{shortDescription(article.description, 200)}</div>
+            <div style={{ width: '600px', fontSize: '14px', color: 'rgba(0, 0, 0, 0.88)' }}>
+              <div>{shortDescription(article.description, 100)}</div>
             </div>
           </div>
         </article>

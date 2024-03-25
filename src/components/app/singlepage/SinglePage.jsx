@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 // SinglePage.js
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { message } from 'antd';
 import styles from './style.module.scss';
@@ -67,12 +67,6 @@ const SinglePage = () => {
     }
     return text;
   };
-
-  // const toStart = (data) => {
-  //   if (data) {
-  //     window.location.href = '/';
-  //   }
-  // };
 
   const deleteArticle = async (articlew) => {
     const slugForDelete = slug;
@@ -153,7 +147,15 @@ const SinglePage = () => {
             {loggedIn && article.author.username === currentUser ? (
               <div>
                 <button type="button" className={styles['btn-delete']} onClick={() => handleDeleteArticle(article.slug)}>Delete</button>
-                <button type="button" className={styles['btn-edit']}>Edit</button>
+                <Link
+                  to={{
+                    pathname: `/articles/${slug}/edit`,
+                  }}
+                  type="button"
+                  className={styles['btn-edit']}
+                >
+                  Edit
+                </Link>
               </div>
             ) : (
               ''

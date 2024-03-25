@@ -20,6 +20,7 @@ import PrivateRoute from './privateRoute/PrivateRoute';
 import PublicRoute from './publicRoute/PublicRoute';
 import { UpdateUserDataProvider } from '../context/UserUpdate';
 import { CreateAnArticleProvider } from '../context/CreateAnArticle';
+import EditPost from './editPost/Editpost';
 
 const AppContent = () => {
   const { isOnline } = useGlobal();
@@ -32,6 +33,7 @@ const AppContent = () => {
         <Route path="articles/:slug" element={<SinglePage />} />
         <Route path="account/createpost" element={<PrivateRoute><CreatePost /></PrivateRoute>} />
         <Route path="account/profileedit" element={<PrivateRoute><ProfileEdit /></PrivateRoute>} />
+        <Route path="/articles/:slug/edit" element={<PrivateRoute><EditPost /></PrivateRoute>} />
         <Route path="/signup" element={<PublicRoute><SignUp /></PublicRoute>} />
         <Route path="/signin" element={<PublicRoute><SignIn /></PublicRoute>} />
         <Route path="*" element={<NotFound />} />

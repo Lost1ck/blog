@@ -17,8 +17,6 @@ export const UpdateUserDataProvider = ({ children }) => {
     const { slug, favorited } = article;
     const endpoint = `https://blog.kata.academy/api/articles/${slug}/favorite`;
     const method = favorited ? 'DELETE' : 'POST';
-    console.log(favorited);
-    console.log(slug);
     try {
       const { token } = JSON.parse(localStorage.getItem('accessToken')).user;
       const response = await fetch(endpoint, {
@@ -28,17 +26,18 @@ export const UpdateUserDataProvider = ({ children }) => {
           'Content-Type': 'application/json',
         },
       });
-      const { article: updatedArticle } = await response.json();
+      const data = await response.json();
       if (!response.ok) {
         throw new Error('Failed to update the favorite status of the article');
       }
-      console.log(response);
+      const updatedArticle = data.article;
       setArticles((prevArticles) => prevArticles.map((currentArticle) => (
-        currentArticle.slug === slug ? { ...currentArticle, ...updatedArticle } : currentArticle
+        currentArticle.slug === article.slug ? updatedArticle : currentArticle
       )));
+      // eslint-disable-next-line consistent-return
+      return updatedArticle;
     } catch (e) {
-      console.error('Error updating favorite status:', e);
-      alert('There was an error updating the favorite status.');
+      throw new Error('Failed to update the favorite status of the article');
     }
   };
 

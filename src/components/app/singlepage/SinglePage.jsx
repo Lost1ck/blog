@@ -17,7 +17,7 @@ const SinglePage = () => {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
   const {
-    loading, error, loggedIn,
+    loading, error, loggedIn, setArticles,
   } = useGlobal();
 
   const currentUser = JSON.parse(localStorage.getItem('accessToken'))?.user?.username;
@@ -40,19 +40,10 @@ const SinglePage = () => {
   if (loading) return <Spinner className={styles.spin} />;
   if (error) return <Noarticles />;
 
-  const setArticles = (updatedArticle) => {
-    setArticle((prevArticle) => ({
-      ...prevArticle,
-      favorited: updatedArticle.favorited,
-      favoritesCount: updatedArticle.favoritesCount,
-    }));
-  };
-
-  const handleLikeClick = async () => {
-    if (loggedIn) {
-      await handleLike(article, loggedIn, setArticles);
-    } else {
-      message.error('Please log in to like articles.');
+  const handleLikeClick = async (articleData) => {
+    const updatedArticle = await handleLike(articleData, loggedIn, setArticles);
+    if (updatedArticle) {
+      setArticle(updatedArticle);
     }
   };
 
@@ -70,7 +61,7 @@ const SinglePage = () => {
     return text;
   };
 
-  console.log(article);
+  // console.log(article);
 
   const deleteArticle = async (articlew) => {
     const slugForDelete = slug;
@@ -114,6 +105,8 @@ const SinglePage = () => {
     });
   };
 
+  console.log(article);
+
   return (
     <div className={styles.container}>
       <article
@@ -129,9 +122,9 @@ const SinglePage = () => {
             <button
               type="button"
               className={`${styles.flex} ${styles['custom-button']}`}
-              onClick={handleLikeClick}
+              onClick={() => handleLikeClick(article)}
             >
-              <img src={article.favorited ? logo : unLogo} className={styles['like-article']} alt="like article" />
+              <img src={article.favorited ? unLogo : logo} className={styles['like-article']} alt="like article" />
               <div>{article.favoritesCount}</div>
             </button>
           </div>

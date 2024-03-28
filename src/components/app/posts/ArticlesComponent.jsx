@@ -76,11 +76,15 @@ const ArticlesComponent = () => {
               </div>
               <div className={styles.flex}>
                 <div className={styles['tags-block']}>
-                  {article.tagList.slice(0, 4).map((tag, index) => (
-                    <div key={`${tag} - ${index}`} className={styles['tags-item']}>
-                      {shortDescription(tag, 10)}
-                    </div>
-                  ))}
+                  {article.tagList.filter((tag) => tag
+                    .trim()
+                    .length > 0)
+                    .slice(0, 4)
+                    .map((tag, index) => (
+                      <div key={`${tag} - ${index}`} className={styles['tags-item']}>
+                        {shortDescription(tag, 10)}
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>

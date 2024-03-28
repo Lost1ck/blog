@@ -60,7 +60,6 @@ const SinglePage = () => {
     }
     return text;
   };
-
   // console.log(article);
 
   const deleteArticle = async (articlew) => {

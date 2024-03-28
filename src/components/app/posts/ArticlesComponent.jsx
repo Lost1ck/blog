@@ -58,7 +58,6 @@ const ArticlesComponent = () => {
           style={{ color: 'black' }}
           className={styles.article}
         >
-          {/* Like is here */}
           <div>
             <div>
               <div className={styles.flex}>

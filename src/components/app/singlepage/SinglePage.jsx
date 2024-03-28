@@ -20,7 +20,7 @@ const SinglePage = () => {
     loading, error, loggedIn,
   } = useGlobal();
 
-  const currentUser = JSON.parse(localStorage.getItem('accessToken')).user.username;
+  const currentUser = JSON.parse(localStorage.getItem('accessToken'))?.user?.username;
 
   useEffect(() => {
     const fetchArticle = async () => {

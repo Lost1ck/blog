@@ -31,7 +31,7 @@ export default function Header() {
     <header className={styles.container}>
       <Link to="/">
         <div className={styles.title}>
-          <h2>Realworld Blog</h2>
+          <p>Realworld Blog</p>
         </div>
       </Link>
       <div className={styles['container-flex']}>

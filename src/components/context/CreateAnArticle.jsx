@@ -47,6 +47,9 @@ export const CreateAnArticleProvider = ({ children }) => {
       }
       const data = await response.json();
       console.log(data);
+      if (response.status === 200) {
+        window.location.href = '/';
+      }
     } catch (e) {
       console.error('Error creating article', e);
       setError(`Failed to create article: ${e.message}`);

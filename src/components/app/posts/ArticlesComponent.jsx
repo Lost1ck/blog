@@ -48,8 +48,6 @@ const ArticlesComponent = () => {
   if (loading) return <Spinner />;
   if (error) return <Noarticles />;
 
-  console.log(articles);
-
   return (
     <div className={styles.container}>
       {articles.map((article) => (
@@ -62,7 +60,7 @@ const ArticlesComponent = () => {
             <div>
               <div className={styles.flex}>
                 <Link to={`/articles/${article.slug}`} className={styles.title}>
-                  {shortDescription(article.title, 15)}
+                  {shortDescription(article.title, 100)}
                 </Link>
                 <button
                   type="button"

@@ -104,8 +104,6 @@ const SinglePage = () => {
     });
   };
 
-  console.log(article);
-
   return (
     <div className={styles.container}>
       <article
@@ -116,7 +114,7 @@ const SinglePage = () => {
         <div>
           <div className={styles.flex}>
             <div className={styles.title}>
-              {shortDescription(article.title, 15)}
+              {shortDescription(article.title, 30)}
             </div>
             <button
               type="button"
@@ -131,7 +129,7 @@ const SinglePage = () => {
             <div className={styles['tags-block']}>
               {article.tagList.slice(0, 4).map((tag, index) => (
                 <div key={`${tag} - ${index}`} className={styles['tags-item']}>
-                  {shortDescription(tag, 10)}
+                  {shortDescription(tag, 40)}
                 </div>
               ))}
             </div>
@@ -170,9 +168,9 @@ const SinglePage = () => {
             )}
           </div>
         </div>
-        <div style={{ width: '600px' }}>
+        <div style={{ width: '80%' }}>
           <div>{article.description}</div>
-          <ReactMarkdown>{shortDescription(article.body, 50)}</ReactMarkdown>
+          <ReactMarkdown>{shortDescription(article.body)}</ReactMarkdown>
         </div>
       </article>
     </div>

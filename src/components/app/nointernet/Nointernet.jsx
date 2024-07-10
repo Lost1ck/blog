@@ -7,7 +7,7 @@ export default function Nointernet() {
     <Space className={styles.container}>
       <Alert
         message="Error"
-        description="There is No internet connection"
+        description="There is no internet connection"
         type="error"
         showIcon
       />
